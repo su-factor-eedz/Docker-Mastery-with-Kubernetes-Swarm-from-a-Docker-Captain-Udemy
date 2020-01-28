@@ -1,17 +1,89 @@
 8. Docker Editions: Which Do I Use? [Resources]
 - Resources downloaded to /Proj/study/udemy/Docker Mastery
+- Course focus is Docker CE (Community Edition)
+
+# 3 Major Types of Installs (generalizing over a dozen editions): 1. Direct 2. Mac/Win 3. Cloud
+- until 2016, it was just Linux
+- Linux - different per distro
+- Docker for Windows (aka legacy Docker Toolbox)
+- Docker for Mac (aka legacy Docker Toolbox) (don't use brew)
+- small VM has been started up on Mac and Win to run containers within
+- Docker for AWS/Azure/Google - usually on Linux and with features specific to that cloud
+- * Course Focus Docker for Windows/Mac
+
+# CE vs EE, Stable vs Edge
+- Docker CE (free) vs. Docker EE (paid)
+- EE = Enterprise Edition - Management GUI, LDAP auth for AD, 24/7 Support, bought per month/year subscription, certified for specific versions of Linux and Windows
+- CE is tested/"certified" "a little bit" on a broader set of platforms
+- Edge means "Beta" released every month, only supported for a month until next Beta version
+- Stable (default) released every quarter, supported for FOUR months
+- EE gives you longer support life cycles and patches per version
+
+|
+|
 
 9. Installing Docker: The Fast Way
+- upgrading Mac to 2.2.0.0
+"Installing on Windows 10 (Pro or Enterprise)
+
+This is the best experience on Windows, but due to OS feature requirements, it only works on the Pro and Enterprise editions of Windows 10 (with latest update rollups). You need to install "Docker for Windows" from the Docker Store.
+
+With this Edition I recommend using PowerShell for the best CLI experience. See more info in the next few Lectures.
+
+Installing on Windows 7, 8, or 10 Home Edition
+
+Unfortunately, Microsoft's OS features for Docker and Hyper-V don't work in these older versions, and "Windows 10 Home" edition doesn't have Hyper-V, so you'll need to install the Docker Toolbox, which is a slightly different approach to using Docker with a VirtualBox VM. This means Docker will be running in a Virtual Machine that sits behind the IP of your OS, and uses NAT to access the internet.
+
+NOTE FOR TOOLBOX USERS: For all examples that use http://localhost , you'll need to replace with http://192.168.99.100
+
+Installing on Mac
+
+You'll want to install Docker for Mac, which is great. If you're on an older Mac with less than OSX Yosemite 10.10.3, you'll need to install the Docker Toolbox instead.
+
+Installing on Linux
+
+Do *not* use your built in default packages like apt/yum install docker.io  because those packages are old and not the Official Docker-Built packages. 
+
+I prefer to use the Docker's automated script to add their repository and install all dependencies: curl -sSL https://get.docker.com/ | sh  but you can also install in a more manual method by following specific instructions on the Docker Store for your distribution, like this one for Ubuntu.
+
+What if None Of These Options Work
+
+Maybe you don't have local admin, or maybe your machine doesn't have enough resources. Well the best free option here is to use play-with-docker.com, which will run one or more Docker instances inside your browser, and give you a terminal to use it with. You can actually create multiple machines on it, and even use the URL to share the session with others in a sort of collaborative experience.  I highly recommend you check it out.  Most of the lectures in this course can be used with "PWD", but it's only limitation really is it's time bombed to 4 hours, at which time it'll delete your servers."
+
+|
+|
 
 10. Windows Docker Options
+- Course by default will be talking about Linux Containers, since everything used to be Linux-based
+- Now also have Windows Containers formalized end of 2016
+- Best version of Docker on Windows is "Docker for Windows" edition only compatible with Pro and Enterprise
+- Docker Toolbox is for 7/8/8.1 or Win 10 Home without the features available through Hyper-V
+- Server 2016 supports Windows Containers, rapidly evolving
+
+# Docker on Windows 10 Pro/Ent
+- https://store.docker.com
+- More features than a Linux VM
+- Uses Hyper-V with tiny Linux VM for Linux Containers
+- PowerShell-native BUT don't use PowerShell ISE
+
+# Docker on Windows 7/8 and 10 Home
+- Docker Toolbox
+- https://store.docker.com
+- Runs tiny Linux VM in VirtualBox via [docker-machine] command line to create VMs and destroy them
+- VM comes with Bash shell called "Docker QuickStart Terminal" to allow auto-starting and running this correctly
+- No support for windows Containers
+
+# Docker on Windows Server 2016
+- Runs Windows-native Containers -- i.e. without Hyper-V or anything installed in a Docker container
+- Also runs Docker for Windows, BUT that's not meant for production; meant for local dev/test
 
 11. Docker for Windows 10 Pro/Ent: Setup and Tips [Resources]
 
-12. Docker Toolbox for Win 7, 8, and 10 Home: Setup and Tips
+12. Docker Toolbox for Win 7, 8, and 10 Home: Setup and Tips [Resources]
 
-13. Docker for Mac Setup and Tips
+13. Docker for Mac Setup and Tips [Resources]
 
-14. Docker for Linux Setup and Tips
+14. Docker for Linux Setup and Tips [Resources]
 
 Quiz 1: Quiz on Proper Docker Install
 
