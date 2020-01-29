@@ -84,6 +84,22 @@ Maybe you don't have local admin, or maybe your machine doesn't have enough reso
 
 
 12. Docker Toolbox for Win 7, 8, and 10 Home: Setup and Tips [Resources]
+- use 192.168.99.100 for the default machine IP for Docker Toolbox
+- [docker-machine ls]
+- [docker-machine start]
+- [docker version]
+- [docker-machine ls] fails in cmder, so:
+- [docker-machine env default] and use the bottom line to configure the shell
+* Use Docker Quickstart Terminal to start it
+- in the background it auto-creates/auto-starts the VM
+- defaults to Bash shell
+- can use [docker-machine] to manipulate that machine in the background
+- "Bind Mount" - connect source files downloaded on your Windows machine into the Docker Linux machine
+-- ONLY works for code stored in C:\Users
+-- DON'T use for databases, only for code
+* can use [docker-machine] to recreate the VM, and to create additional ones
+
+- 
 
 13. Docker for Mac Setup and Tips [Resources]
 
