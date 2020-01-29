@@ -78,6 +78,10 @@ Maybe you don't have local admin, or maybe your machine doesn't have enough reso
 - Also runs Docker for Windows, BUT that's not meant for production; meant for local dev/test
 
 11. Docker for Windows 10 Pro/Ent: Setup and Tips [Resources]
+- Share C drive to Docker containers
+- [docker ps]
+- [docker info]
+
 
 12. Docker Toolbox for Win 7, 8, and 10 Home: Setup and Tips [Resources]
 
