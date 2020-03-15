@@ -144,3 +144,6 @@ Quiz 1: Quiz on Proper Docker Install
 16. Terminal Shell and Tab Completion for Docker CLI
 
 17. Docker Version Format Change
+- Edge - released monthly and supported for a month
+- Stable - released quarterly and supported for 4 months
+
