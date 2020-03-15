@@ -104,6 +104,31 @@ Maybe you don't have local admin, or maybe your machine doesn't have enough reso
 13. Docker for Mac Setup and Tips [Resources]
 
 14. Docker for Linux Setup and Tips [Resources]
+# Installed in WSL apparently successfully
+root@midnite:/# curl -fsSL get.docker.com -o get.docker.sh
+root@midnite:/# sh get.docker.sh
+# Executing docker install script, commit: 442e66405c304fa92af8aadaa1d9b31bf4b0ad94
++ sh -c apt-get update -qq >/dev/null
++ sh -c DEBIAN_FRONTEND=noninteractive apt-get install -y -qq apt-transport-https ca-certificates curl >/dev/null
++ sh -c curl -fsSL "https://download.docker.com/linux/ubuntu/gpg" | apt-key add -qq - >/dev/null
+Warning: apt-key output should not be parsed (stdout is not a terminal)
++ sh -c echo "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable" > /etc/apt/sources.list.d/docker.list
++ sh -c apt-get update -qq >/dev/null
++ [ -n  ]
++ sh -c apt-get install -y -qq --no-install-recommends docker-ce >/dev/null
+If you would like to use Docker as a non-root user, you should now consider
+adding your user to the "docker" group with something like:
+
+  sudo usermod -aG docker your-user
+
+Remember that you will have to log out and back in for this to take effect!
+
+WARNING: Adding a user to the "docker" group will grant the ability to run
+         containers which can be used to obtain root privileges on the
+         docker host.
+         Refer to https://docs.docker.com/engine/security/security/#docker-daemon-attack-surface
+         for more information.
+         
 
 Quiz 1: Quiz on Proper Docker Install
 
