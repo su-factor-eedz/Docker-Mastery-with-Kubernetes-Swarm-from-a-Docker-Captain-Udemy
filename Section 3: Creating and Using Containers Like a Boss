@@ -1,5 +1,33 @@
 # 18. Check Our Docker Install and Config
+- [docker version]
+- [docker info]
+- Used to be [docker run]
+- Now is [docker container run] in [docker command + sub-command] form after the number of commands exploded and needed to become grouped
+- New commands will not have short format; must be a sub-command of existing command
+
 # 19. Starting a Nginx Web Server
+- Image - binaries, libraries, source code,... that make up your application
+- Container - running instance of Image as a process
+- Registry - storage for container images (e.g. Docker Hub)
+- [docker container run --publish 80:80 nginx]
+- NOTE: For Windows, Ctrl-C exits foreground container process but leave it running in background
+- [docker container run --publsih 80:80 --detach nginx]
+-- returns unique container id
+-- NOTE: For Windows, additional command to stop container: [docker stop <container id/name>]
+- [docker container ls] OLD WAY: [docker ps]
+- [docker container stop <first few digits of id>] OLD WAY: [docker stop <first few digits of id>] stops container but doesn't remove it
+- [docker container ls] only shows running containers
+- [docker container ls -a] shows stopped ones too
+- [docker container run] ALWAYS starts new container
+- [docker container start] starts an EXISTING stopped one
+- *Container ID* is created for us and *Container Name* is as well if we don't specify (the latter, which will use adjectives and surnames of notable hackers or scientists)
+- [docker container run --publish 80:80 --detach --name webhost nginx]
+- [docker container logs webhost]
+- [docker container top webhost] shows process running inside the container
+- [docker container rm] OLDWAY: [docker rm] to delete one or more containers
+-- [docker container rm 63f 690...]
+-- but must first stop running containers OR force it: [docker container rm -f 63f]
+
 # 20. Debrief: What Happens When We Run a Container
 # 21. Container VS. VM: It's Just a Process
 # 22. Windows Containers: Docker Is No Longer Just Linux
