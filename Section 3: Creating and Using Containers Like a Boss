@@ -40,6 +40,31 @@
 [docker container run --publish 8080:80 --name webhost -d nginx:1:11 nginx -T]
 
 # 21. Container VS. VM: It's Just a Process
+- Containers are just a [process] running on host OS
+- https://www.bretfisher.com/docker-for-mac-commands-for-getting-into-local-docker-vm/
+-- [docker run -it --rm --privileged --pid=host justincormack/nsenter1]
+-- [docker run -it --rm --privileged --pid=host mongo]
+-- connect to tty on Docker for Mac VM
+[screen ~/Library/Containers/com.docker.docker/Data/vms/0/tty]
+-- disconnect that session but leave it open in background
+[Ctrl-a d]
+-- list that session that's still running in background
+[screen -ls]
+-- reconnect to that session (don't open a new one, that won't work and 2nd tty will give you garbled screen)
+[screen -r]
+-- kill this session (window) and exit
+[Ctrl-a k]
+- Find running process with [ps aux | grep mongodb]
+- Stop it with [docker container stop mongo]
+- Start it with [docker container start mongo]
+
+[[Resources]]
+https://www.bretfisher.com/docker-for-mac-commands-for-getting-into-local-docker-vm/
+https://www.bretfisher.com/getting-a-shell-in-the-docker-for-windows-vm/
+https://github.com/mikegcoleman/docker101/blob/master/Docker_eBook_Jan_2017.pdf
+https://www.youtube.com/watch?v=sK5i-N34im8&feature=youtu.be&list=PLBmVKD7o3L8v7Kl_XXh3KaJl9Qw2lyuFl
+
+
 # 22. Windows Containers: Docker Is No Longer Just Linux
 # 23. Assignment: Manage Multiple Containers
 # 24. Assignment Answers: Manage Multiple Containers
