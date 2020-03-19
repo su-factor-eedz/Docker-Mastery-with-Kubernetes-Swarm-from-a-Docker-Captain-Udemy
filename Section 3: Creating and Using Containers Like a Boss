@@ -29,6 +29,16 @@
 -- but must first stop running containers OR force it: [docker container rm -f 63f]
 
 # 20. Debrief: What Happens When We Run a Container
+## What happens in 'docker container run'
+- pulls image down from remote image repository (default is Docker Hub), if image is not found in local image cache
+- pulls download latest image version if version not specified
+- creates new container based on image by putting layers of changes over it
+- gives container virtual IP address on network inside docker engine
+- opens up port if specified with [--publish]; otherwise does not open ports at all
+- container starts with command specified in the Dockerfile
+- can also set default command when it starts container
+[docker container run --publish 8080:80 --name webhost -d nginx:1:11 nginx -T]
+
 # 21. Container VS. VM: It's Just a Process
 # 22. Windows Containers: Docker Is No Longer Just Linux
 # 23. Assignment: Manage Multiple Containers
