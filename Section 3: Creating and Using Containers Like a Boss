@@ -66,7 +66,39 @@ https://www.youtube.com/watch?v=sK5i-N34im8&feature=youtu.be&list=PLBmVKD7o3L8v7
 
 
 # 22. Windows Containers: Docker Is No Longer Just Linux
+Windows Containers and Docker: 101
+https://www.youtube.com/watch?v=066-9yw8-7c
+- 7:00 minutes for starting container and commands within it
+- [docker un -it sixeyed/print-env powershell]
+- [docker run -it sixeyed/print-env ping -n 100 192.168.2.150]
+Versus
+- [docker run -it sixeyed/print-env]
+- [docker run -d sixeyed/print-env]
+- [docker inspect] allows viewing of IP address of container needed to connect to container service running on Windows host if you're logged on locally to it
+- in 2017, could only run Win containers on Win, Linux on Linux, but can combine them into one Docker Swarm used as a cross-platform compute cluster
+- Twitter Docker Captains: https://is.gd/7nU0if
+- Getting Started Docs: Docker https://is.gd/5WrZLC, MSDN https://is.gd/Qnd2LD
+- @EltonStoneman https://is.gd/jEUW1r
+
+Beyond \ - the path to Windows and Linux parity in Docker
+https://www.youtube.com/watch?v=4ZY_4OeyJsw
+"-Bringing Docker to Windows has been an awesome project - while at times challenging or frustrating the overwhelming majority of the times it’s just been fun.  This talk will focus on the work it took to bring Windows and Docker together, some of the areas where gaps remain between the Windows and Linux platform (specific to Docker) and the roadmap towards convergence.  We will discuss some of the tradeoffs and choices we made as well as some of the lessons we took from the Linux ecosystem and how we applied them as we built out Windows support."
+
+Docker + Microsoft - Investing in the Future of your Applications
+https://www.youtube.com/watch?v=QASAqcuuzgI
+"When you combine Docker's cross platform support of Linux and Windows containers and Microsoft cloud technologies, you get a supercharged portfolio that can support virtually every enterprise workload. Whether you host your workloads in private datacenters, public cloud or hybrid we offer great end-to-end solutions or individual components from the developer's keyboard to cloud. Azure Container Service is the simplest way to deploy your container orchestration environment such as Docker Datacenter so your developers can deploy their apps more quickly. Windows Server Containers are powered by Docker Enterprise Edition. You use the same Docker tooling to build and run those containers as you do your Linux containers and with the tooling you choose - Eclipse, Visual Studio, Jenkins, Visual Studio Team Service. Microsoft + Docker empowers you, the developer to build cutting edge apps - quickly!"
+
+
 # 23. Assignment: Manage Multiple Containers
+- docs.docker.com and --help
+- run a nginx, msql, and https server
+- run all of them with --detach or -d, name them with --name
+- listen on different ports: nginx 80:80, httpd 8080:80, mysql 3306:3306
+- container command option is [environment variable passing]
+-- when running mysql, use [--env] to pass in [MYSQL_RANDOM_ROOT_PASSWORD=yes]
+-- use the [docker container logs] command to find out what password will be
+- when done, clean up with [docker container stop] and [docker container rm]
+
 # 24. Assignment Answers: Manage Multiple Containers
 # 25. What's Going On In Containers: CLI Process Monitoring
 # 26. Getting a Shell Inside Containers: No Need for SSH
