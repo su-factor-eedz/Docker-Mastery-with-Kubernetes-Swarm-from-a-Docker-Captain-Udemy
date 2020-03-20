@@ -127,6 +127,11 @@ docker container rm mymysql myhttpd mynginx
 
 
 # 25. What's Going On In Containers: CLI Process Monitoring
+[docker container top] shows process list of what's running inside container
+[docker container inspect] shows details on how container started and how it's configured with volumes, networking,... {{OLD WAY}}: [docker inspect]
+[docker container stats] performance stats for all containers in a real-time stream {{OLD WAY}}: [docker stats]
+
+
 # 26. Getting a Shell Inside Containers: No Need for SSH
 # 27. Docker Networks: Concepts for Private and Public Comms in Containers
 # 28. FIXME: Change In Official Nginx Image Removes Ping
