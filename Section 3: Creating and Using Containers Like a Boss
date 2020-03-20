@@ -91,7 +91,7 @@ https://www.youtube.com/watch?v=QASAqcuuzgI
 
 # 23. Assignment: Manage Multiple Containers
 - docs.docker.com and --help
-- run a nginx, msql, and https server
+- run a nginx, mysql, and https server
 - run all of them with --detach or -d, name them with --name
 - listen on different ports: nginx 80:80, httpd 8080:80, mysql 3306:3306
 - container command option is [environment variable passing]
@@ -100,6 +100,32 @@ https://www.youtube.com/watch?v=QASAqcuuzgI
 - when done, clean up with [docker container stop] and [docker container rm]
 
 # 24. Assignment Answers: Manage Multiple Containers
+## MY ANSWERS
+
+[docker container run --publish 3306:3306 --detach --name mymysql --env MYSQL_RANDOM_ROOT_PASSWORD=yes mysql]
+
+[docker container run --publish 8080:80 --detach --name myhttpd httpd]
+
+[docker container run --publish 80:80 --detach --name mynginx nginx]
+
+### used this command to find the generated random password:
+[docker logs mymysql 2>/dev/null | grep "GENERATED"]
+
+### confirmed web services good:
+AirTight:udemy-docker-mastery twostudy$ curl host:8080
+curl: (6) Could not resolve host: host
+AirTight:udemy-docker-mastery twostudy$ curl localhost:8080
+<html><body><h1>It works!</h1></body></html>
+
+### stop then delete containers
+docker container stop mymysql mynginx myhttpd
+docker container rm mymysql myhttpd mynginx
+
+## LESSON ANSWERS
+- mostly the same
+- hardest part was revealing the randomly generated mysql password that was not displayed in [docker inspect] and was instead found in the command above
+
+
 # 25. What's Going On In Containers: CLI Process Monitoring
 # 26. Getting a Shell Inside Containers: No Need for SSH
 # 27. Docker Networks: Concepts for Private and Public Comms in Containers
