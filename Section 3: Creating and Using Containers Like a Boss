@@ -5,6 +5,7 @@
 - Now is [docker container run] in [docker command + sub-command] form after the number of commands exploded and needed to become grouped
 - New commands will not have short format; must be a sub-command of existing command
 
+
 # 19. Starting a Nginx Web Server
 - Image - binaries, libraries, source code,... that make up your application
 - Container - running instance of Image as a process
@@ -28,6 +29,7 @@
 -- [docker container rm 63f 690...]
 -- but must first stop running containers OR force it: [docker container rm -f 63f]
 
+
 # 20. Debrief: What Happens When We Run a Container
 ## What happens in 'docker container run'
 - pulls image down from remote image repository (default is Docker Hub), if image is not found in local image cache
@@ -38,6 +40,7 @@
 - container starts with command specified in the Dockerfile
 - can also set default command when it starts container
 [docker container run --publish 8080:80 --name webhost -d nginx:1:11 nginx -T]
+
 
 # 21. Container VS. VM: It's Just a Process
 - Containers are just a [process] running on host OS
@@ -99,6 +102,7 @@ https://www.youtube.com/watch?v=QASAqcuuzgI
 -- use the [docker container logs] command to find out what password will be
 - when done, clean up with [docker container stop] and [docker container rm]
 
+
 # 24. Assignment Answers: Manage Multiple Containers
 ## MY ANSWERS
 
@@ -133,6 +137,25 @@ docker container rm mymysql myhttpd mynginx
 
 
 # 26. Getting a Shell Inside Containers: No Need for SSH
+[docker container run -it] start new container interactively
+[docker container exec -it] run additional command in existing container
+[docker container run -it --name proxy nginx bash]
+[exit] to leave that interactive bash session
+[docker container run -it --name myubuntu ubuntu] automatically drops you into bash because its default CMD is bash
+- there you can run [apt-get update] and [apt-get install -y curl]
+- very minimal compared to live CD or Ubuntu ISO, so you can just add more software to it
+- can [exit] and get back in with [docker container start -ai myubuntu]
+- [docker container exec -it mysql bash]
+- can [exit] and NOT stop the container, because it was already running upon connection
+
+## Alpine
+[docker image pull alpine] security focused small 5MB image also with its own package manager
+[docker container run -it --name my-alpine alpine sh] SH because BASH is not available in image
+[apk] is the package manager, and can be used to install bash, if needed
+[apk add bash]
+- ideal for container images due to small size
+
+
 # 27. Docker Networks: Concepts for Private and Public Comms in Containers
 # 28. FIXME: Change In Official Nginx Image Removes Ping
 # 29. Docker Networks: CLI Management of Virtual Networks
