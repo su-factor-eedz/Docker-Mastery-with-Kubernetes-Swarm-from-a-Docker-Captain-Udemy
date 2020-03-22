@@ -168,13 +168,61 @@ docker container rm mymysql myhttpd mynginx
 - use [inspect --format] to get IP address:
 [docker container inspect --format '{{ .NetworkSettings.IPAddress }}' engine]
 - above command requires double quotes if using Windows
-- 
+
 
 # 28. FIXME: Change In Official Nginx Image Removes Ping
 replace [docker container run <stuff> nginx] with:
-[docker container run <stuff> nginx:alpine]
+[docker container run <stuff> nginx:alpine] since it still has [ping] in it, unlike nginx:latest image
+
 
 # 29. Docker Networks: CLI Management of Virtual Networks
+[docker network ls] bridge/docker0 is default Docker virtual network, NAT'd behind host IP
+[docker network inspect]
+[docker network create --driver] --driver is optional
+[connect] attach a network to a container
+[disconnect] detach a network from a container
+- Find containers attached to bridge network: 
+[docker network inspect 3621c83d7c44 --format ' {{ .Containers }}']
+[docker network inspect bridge --format ' {{ .Containers }}']
+- Look at IPAM config showing default network of [172.17.0.0/16] gateway 172.17.0.1
+[docker network inspect bridge] and see "IPAM" config
+- Note [host] network is what allows use of [--network host] to skip virtual networks, gain performance, but sacrifice security of container model, attaching container DIRECTLY to host interface
+[docker network ls] to see list of [bridge, host, none]
+- [none] is like having a computer interface not attached to anything
+- Create your first network:
+[docker network create my_app_net] where the [DRIVER] value is [bridge] as the default driver 
+-- [bridge] simple driver that create virtual network locally with its own subnet somewhere around 172.17.x.x and above, incrementing as it goes (i.e. 172.18.x.x, 172.19.x.x,...)
+-- does NOT have advanced features like [Overlay Networks] that allow private networking between hosts, nor other 3rd-party drivers like [Weave]
+[docker network create --help]
+
+[--network] option can be used when creating a container:
+[docker container run --detach --name my_engine --network my_app_net nginx]
+
+then [docker network inspect my_app_net --format ' {{ .Containers }} '] will show your attached container
+
+or use [docker network inspect my_app_net] to see all info, like how it use the next subnet available:
+"Containers": {
+            "a4d8ac053c9123ec927901da7ea604c7243270369320c2b711b67608eba5cc58": {
+                "Name": "my_engine",
+                "EndpointID": "134bd65c000acbd3785592665ce1c9c3ac03308f4a71c780d8f247f56099f9ff",
+                "MacAddress": "02:42:ac:12:00:02",
+                "IPv4Address": "172.18.0.2/16",
+                "IPv6Address": ""
+            }
+        }
+
+- attach the new network to original container:
+[docker network connect my_app_net engine]
+
+- confirm both containers now attached to network:
+[docker network inspect my_app_net]
+
+- confirm original container attached to both bridge and new network:
+[docker container inspect engine]
+
+- disconnect network from original container:
+[docker network disconnect 1644301a5c47 01abff9604bf]
+
 # 30. Docker Networks: DNS and How Containers Find Each Other
 # 31. Assignment: Using Containers for CLI Testing
 # 32. Assignment Answers: Using Containers for CLI Testing
