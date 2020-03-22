@@ -72,7 +72,7 @@ https://www.youtube.com/watch?v=sK5i-N34im8&feature=youtu.be&list=PLBmVKD7o3L8v7
 Windows Containers and Docker: 101
 https://www.youtube.com/watch?v=066-9yw8-7c
 - 7:00 minutes for starting container and commands within it
-- [docker un -it sixeyed/print-env powershell]
+- [docker run -it sixeyed/print-env powershell]
 - [docker run -it sixeyed/print-env ping -n 100 192.168.2.150]
 Versus
 - [docker run -it sixeyed/print-env]
@@ -125,6 +125,7 @@ AirTight:udemy-docker-mastery twostudy$ curl localhost:8080
 docker container stop mymysql mynginx myhttpd
 docker container rm mymysql myhttpd mynginx
 
+
 ## LESSON ANSWERS
 - mostly the same
 - hardest part was revealing the randomly generated mysql password that was not displayed in [docker inspect] and was instead found in the command above
@@ -157,7 +158,22 @@ docker container rm mymysql myhttpd mynginx
 
 
 # 27. Docker Networks: Concepts for Private and Public Comms in Containers
+- each container connected to a private virtual network ["bridge"]
+- each [virtual network] routes through [NAT firewall] on host IP
+- all containers on virtual network can talk to each other inside host (without -p)
+- can create virtual networks to logically separate containers/apps
+- can have multiple virtual networks connected to one container
+- can have container talk to NO networks
+- [Skip Virtual Networks] by using host IP [--net=host]
+- use [inspect --format] to get IP address:
+[docker container inspect --format '{{ .NetworkSettings.IPAddress }}' engine]
+- above command requires double quotes if using Windows
+- 
+
 # 28. FIXME: Change In Official Nginx Image Removes Ping
+replace [docker container run <stuff> nginx] with:
+[docker container run <stuff> nginx:alpine]
+
 # 29. Docker Networks: CLI Management of Virtual Networks
 # 30. Docker Networks: DNS and How Containers Find Each Other
 # 31. Assignment: Using Containers for CLI Testing
