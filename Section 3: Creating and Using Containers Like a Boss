@@ -239,7 +239,25 @@ or use [docker network inspect my_app_net] to see all info, like how it use the 
 
 
 # 31. Assignment: Using Containers for CLI Testing
+- use curl in CentOS vs Ubuntu
+
 # 32. Assignment Answers: Using Containers for CLI Testing
+## My Answers
+[docker container run -it --name cents centos:7 bash]
+[curl --version]
+[yum update curl]
+7.29
+still 7.29 after update
+
+[docker container run -it --name bunts ubuntu:14.04 bash]
+[apt-get update && apt-get install curl]
+[curl --version]
+7.35
+
+## Lesson Answers
+[--rm] makes it so you don't have to clean up afterwards
+
+
 # 33. FIXME: Bug in alpine affects nslookup
 # 34. Assignment: DNS Round Robin Test
 # 35. Assignment Answers: DNS Round Robin Test
