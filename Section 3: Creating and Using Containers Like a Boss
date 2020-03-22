@@ -224,6 +224,20 @@ or use [docker network inspect my_app_net] to see all info, like how it use the 
 [docker network disconnect 1644301a5c47 01abff9604bf]
 
 # 30. Docker Networks: DNS and How Containers Find Each Other
+- Docker uses [container names] as equivalent of [host names]
+- our newly created network automatically gets a special new feature which is [Automatic DNS Resolution] for all containers on that network
+- create another container attached to new network:
+[docker container run --detach --name my_engine_0 --network my_app_net nginx:alpine]
+- note: Docker sets host name to container name, but you can also set [aliases]
+
+- now, connect to new container
+[docker container exec -it my_engine_0 ping my_engine]
+
+- [docker compose] will automatically create new virtual networks whenever you spin up an app with it
+
+- otherwise [--link] can be used to apply DNS to your network
+
+
 # 31. Assignment: Using Containers for CLI Testing
 # 32. Assignment Answers: Using Containers for CLI Testing
 # 33. FIXME: Bug in alpine affects nslookup
