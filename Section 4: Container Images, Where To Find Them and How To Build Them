@@ -1,1 +1,21 @@
+36. What's In An Image (and What Isn't)
+Image
+- app binaries and dependencies
+- metadata about the image data and how to run the image
+- official: "An image is an ordered collection of root filesystem changes and the corresponding execution parameters for use within a container runtime"
+- not a complete OS -- no kernel, no kernel modules (e.g. drivers)
+- as small as one file, or as big as an Ubuntu distro with apt, Apache, PHP and more installed
 
+
+37. The Mighty Hub: Using Docker Hub Registry Images
+Docker Hub: https://hub.docker.com/
+- rare to want your software to update automatically; instead, you usually want to control that process with some other DevOps tool
+- vet an image by:
+-- looking at number of pulls and number of stars
+-- looking at an open source repository that shows how the image was made
+[[Resources]]
+List of Official Docker Images:
+https://github.com/docker-library/official-images/tree/master/library
+
+
+38. Images and Their Layers: Discover the Image Cache
