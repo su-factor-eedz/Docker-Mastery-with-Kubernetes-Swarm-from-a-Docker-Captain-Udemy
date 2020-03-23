@@ -259,5 +259,38 @@ still 7.29 after update
 
 
 # 33. FIXME: Bug in alpine affects nslookup
+- nslookup
+- alpine:latest
+- early 2020 but introduced in latest Alpine image 3.11.3 that affects how nslookup works on hostnames
+- solution: use modified command with dot added: [nslookup search.], or use older Alpine image like 3.10
+- bug tracked here: https://github.com/gliderlabs/docker-alpine/issues/539
+
+
 # 34. Assignment: DNS Round Robin Test
+- Docker Engine 1.11 introduced multiple containers on network responding to same DNS address using [aliases]
+- image: [elasticsearch:2]
+- use [-network-alias search] when creating 2 containers
+- run [alpine nslookup search] with [--net] to see the two containers in the output
+- run [centos curl -s search:9200] with [--net] multiple times until both names eventually come up
+
+
 # 35. Assignment Answers: DNS Round Robin Test
+## My Answers
+
+**docker network connect**
+https://docs.docker.com/engine/reference/commandline/network_connect/
+
+[docker network create searchthis]
+[docker container run --detach elasticsearch:2]
+[docker container run --detach elasticsearch:2]
+[docker network connect --alias search searchthis 3b520478cfa4]
+[docker network connect --alias search searchthis e67140af105a]
+[docker container run -it --rm --detach alpine:3.10 nslookup search]
+[docker container run -it --rm --detach centos curl -s search:9200]
+
+## Lesson Answers
+[docker network create searchthis]
+[docker container run --detach --network searchthis --network-alias search elasticsearch:2]
+[docker container run --detach --network searchthis --network-alias search elasticsearch:2]
+[docker container run -it --rm --network searchthis alpine:3.10 nslookup search] actually without [-it]
+[docker container run -it --rm --network searchthis centos curl -s search:9200]
