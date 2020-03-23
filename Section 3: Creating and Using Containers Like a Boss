@@ -272,7 +272,9 @@ still 7.29 after update
 - use [-network-alias search] when creating 2 containers
 - run [alpine nslookup search] with [--net] to see the two containers in the output
 - run [centos curl -s search:9200] with [--net] multiple times until both names eventually come up
-
+[[Resources]]
+*Round-robin DNS*
+https://en.wikipedia.org/wiki/Round-robin_DNS
 
 # 35. Assignment Answers: DNS Round Robin Test
 ## My Answers
