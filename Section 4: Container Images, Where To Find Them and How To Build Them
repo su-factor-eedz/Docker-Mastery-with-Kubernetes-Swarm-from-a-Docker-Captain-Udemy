@@ -19,3 +19,20 @@ https://github.com/docker-library/official-images/tree/master/library
 
 
 38. Images and Their Layers: Discover the Image Cache
+[docker image ls]
+[docker history nginx:latest]
+- every image starts with a blank layer known as [scratch]
+- every set of changes on the file system in the image is another [layer]
+- every layer gets its own unique [sha] to allow system to confirm that layer is different from another layer, storing each layer only once on a host
+[Copy-on-Write] when container changes a layer on the image; copies file out into container's differencing for storage in container layer
+[docker image inspect nginx] gives you [metadata] for an image
+
+[[Resources]]
+*About storage drivers*
+https://docs.docker.com/storage/storagedriver/
+- "Containers that write a lot of data consume more space than containers that do not. This is because most write operations consume new space in the container’s thin writable top layer.
+
+Note: for write-heavy applications, you should not store the data in the container. Instead, use Docker volumes, which are independent of the running container and are designed to be efficient for I/O. In addition, volumes can be shared among containers and do not increase the size of your container’s writable layer."
+
+
+39. Image Tagging and Pushing to Docker Hub
