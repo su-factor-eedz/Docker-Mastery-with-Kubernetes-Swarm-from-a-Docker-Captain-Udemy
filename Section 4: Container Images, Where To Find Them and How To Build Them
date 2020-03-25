@@ -36,3 +36,6 @@ Note: for write-heavy applications, you should not store the data in the contain
 
 
 39. Image Tagging and Pushing to Docker Hub
+## Tagging
+- Tag vs "Repository" as username or organization slash repository
+- only official images get to be called just the repository name -- i.e. no username or organization designation
