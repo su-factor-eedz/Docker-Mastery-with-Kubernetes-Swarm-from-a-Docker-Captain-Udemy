@@ -82,3 +82,11 @@ Note: for write-heavy applications, you should not store the data in the contain
 
 [[Resources]]
 https://docs.docker.com/engine/reference/builder/
+
+
+41. Building Images: Running Docker Builds
+42. Building Images: Extending Official Images
+Quiz 4: Image Quiz
+43. Assignment: Build Your Own Dockerfile and Run Containers From It
+44. Assignment Answers: Build Your Own Dockerfile and Run Containers From It
+45. Using Prune to Keep Your Docker System Clean (YouTube)
