@@ -39,3 +39,15 @@ Note: for write-heavy applications, you should not store the data in the contain
 ## Tagging
 - Tag vs "Repository" as username or organization slash repository
 - only official images get to be called just the repository name -- i.e. no username or organization designation
+- tags are a little bit like [Git tags] an a little like [versions]
+- a pointer to a specific image commit or really anything in that repository
+- descriptions of images usually show [MULTIPLE Tags] (shown as both numbers and names) in each bullet for the [SAME Image ID]
+- can [re-tag] existing Docker images
+[docker image tag OriginalName[:TAG] NewName[:TAG]]
+[docker image tag nginx bretfisher/nginx]
+[docker image push bretfish/nginx] pushes/uploads changed layers to an image registry (default: Docker Hub)
+- likely will be denied because [docker login] first required
+- [docker login] without URL defaults to logging in to Docker Hub; can override by adding a server URL
+-- used to store in config.json [cat .docker/config.json] file but now Docker for Mac stores the auth in Keychain for that user for better security
+-- can [docker logout] if done or can't trust machine
+- can push to a private repository, but best to make it private as of first creation
