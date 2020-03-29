@@ -57,7 +57,7 @@ Note: for write-heavy applications, you should not store the data in the contain
 [Dockerfile] - recipe for creating your image
 [cd dockerfile-sample-1/]
 [code Dockerfile]
-[docker build -f some-dockerfile] uses -f to specify a different file from the default [Dockerfile]
+[docker build -f some-dockerfile] uses [-f] or [--file] to specify a different file from the default [Dockerfile]
 
 [FROM] required, usually a minimal distribution, then use their package distribution systems to install what you need in your package
 
@@ -85,8 +85,104 @@ https://docs.docker.com/engine/reference/builder/
 
 
 41. Building Images: Running Docker Builds
+- Running Dockerfile from previous lesson:
+[docker image build -t my-custom-nginx-jv .] dot means build it in this directory
+- see hashes of build tags, where the next time you build from this dockerfile, if the line has not been changed in the dockerfile it is not going to re-run it; allows for shorter build times thereafter
+
+- Now add an additional exposed port to [/Proj/study/udemy/udemy-docker-mastery/dockerfile-sample-1/Dockerfile]
+- change stanza to: [EXPOSE 80 443 8080]
+- now rebuild with: [docker image build -t my-custom-nginx-jv .]
+- upon reaching the modified stanza line, EVERY line after that ALSO has to be [rebuilt] hence choosing carefully about what you put at the top portions of the Dockerfile to minimize the number of layers that require rebuilding below it
+
+
 42. Building Images: Extending Official Images
+- open /Proj/study/udemy/udemy-docker-mastery/dockerfile-sample-2/Dockerfile
+- might want to add software, change the way it starts, add scripts to tweak configuration
+- if official image isn't sufficient, might first look at Docker Hub for another popular tweaks of that image that might solve your problem OR just build your own (but it's more work and upkeep over time)
+
+- [WORKDIR] is just a cd directory change [WORKDIR /usr/share/nginx/html] instead of doing a [RUN cd /usr/share/nginx/html] but using [WORKDIR] is a best practice whenever you're changing directories
+- in this case we are moving to the default Nginx directory for its html files
+- in default configuration on Docker Hub, nginx is just acting as a web server serving static files right off the container disk
+
+- [COPY] is to copy your source code from your LOCAL machine or BUILD SERVERS into your container images
+- here we overwrite the file in the nginx default directory so it uses our own custom homepage instead
+
+- [CMD] REQUIRED stanza is missing, because there's already a CMD specified in the FROM image; we inherit everying from the Dockerfile where we're FROM'ing from; example of CHAINING Dockerfiles together so that images depend on other images, depend on other images, ...
+
+[BEFORE AND AFTER]
+**BEFORE**
+- Standard nginx image behavior:
+[docker container run --rm --publish 80:80 --detach --name my-og-nginx nginx]
+- open it in browser: [open http://localhost -a "Brave Browser.app"]
+
+**AFTER**
+- Now with nginx using our index.html:
+[docker image build -t my-custom-nginx .]
+[docker container run --rm --publish 81:80 --detach --name my-own-nginx my-custom-nginx]
+- open it in browser: [open http://localhost:81 -a "Brave Browser.app"]
+
+[docker image ls] to see it at top as [my-custom-nginx          latest              51c577528f48        4 minutes ago       127MB]
+
+- now tag it to ready it for publishing to Docker Hub
+[docker image tag my-custom-nginx:latest jimmyvales/my-custom-nginx:latest]
+
+- now push:
+[docker push jimmyvales/my-custom-nginx]
+
+
 Quiz 4: Image Quiz
+[-f] is [--file] to use a file other than the default [Dockerfile]
+
+
 43. Assignment: Build Your Own Dockerfile and Run Containers From It
+- Make Dockerfile for Node.js app per instructions in [/Proj/study/udemy/udemy-docker-mastery/dockerfile-assignment-1/Dockerfile]
+- Use Alpine version of official "node" 6.x image
+- Goal: be able to open http://localhost
+
+** MY STEPS **
+[cd /Proj/study/udemy/udemy-docker-mastery/dockerfile-assignment-1]
+modified [Dockerfile] as follows:
+
+++++++++++++++++
+# Instructions from the app developer
+# - you should use the 'node' official image, with the alpine 6.x branch
+FROM node:6-alpine
+
+# - this app listens on port 3000, but the container should launch on port 80
+#  so it will respond to http://localhost:80 on your computer
+EXPOSE 3000
+
+# - then it should use alpine package manager to install tini: 'apk add --update tini'
+# - then it should create directory /usr/src/app for app files with 'mkdir -p /usr/src/app'
+RUN apk add --update tini
+RUN mkdir -p /usr/src/app/
+
+WORKDIR /usr/src/app/
+
+# - Node uses a "package manager", so it needs to copy in package.json file
+COPY package.json .
+
+# - then it needs to run 'npm install' to install dependencies from that file
+RUN npm install
+
+# - to keep it clean and small, run 'npm cache clean --force' after above
+RUN npm cache clean --force
+
+# - then it needs to copy in all files from current directory
+COPY . .
+
+# - then it needs to start container with command '/sbin/tini -- node ./bin/www'
+CMD [ "/sbin/tini", "--", "node", "./bin/www"] 
+
+# - in the end you should be using FROM, RUN, WORKDIR, COPY, EXPOSE, and CMD commands
+
+++++++++++++++++
+
+[docker image build -t assignment-1-node .]
+[docker container run --rm --name jv-asgn-1 --detach --publish 80:3000 assignment-1-node]
+
 44. Assignment Answers: Build Your Own Dockerfile and Run Containers From It
+- fixed syntax above; otherwise all steps were right
+
+
 45. Using Prune to Keep Your Docker System Clean (YouTube)
