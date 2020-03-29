@@ -1,6 +1,19 @@
 # 46. Container Lifeteime & Persistent Data
 
 [[Resources]]
+- An introduction to immutable infrastructure
+Why you should stop managing infrastructure and start really programming it.
+https://www.oreilly.com/radar/an-introduction-to-immutable-infrastructure/
+
+- The twelve-factor app
+https://12factor.net/
+
+- 12 Fractured Apps
+https://medium.com/@kelseyhightower/12-fractured-apps-1080c73d481c#.cjvkgw4b3
+
+- Manage data in Docker
+https://docs.docker.com/storage/
+
 
 # 47. Persistent Data: Data Volumes
 # 48. Shell Differences for Path Expansion
