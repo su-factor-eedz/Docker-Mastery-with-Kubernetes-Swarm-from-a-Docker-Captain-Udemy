@@ -1,4 +1,9 @@
 # 46. Container Lifeteime & Persistent Data
+- Containers are meant to be immutable and ephemeral
+- Immutable infrastructure - don't change things while they're running; changes take place re-deploying a new container
+- "separation of concerns" - 
+- "persistent data" - unique data that must persistent separate from containers related to them
+- Two Persistent Data Solutions - 1. Data Volumes (storage of unique data outside of container's union files system, allowing attachment to any container, seen like a local file path) 2. Bind Mounts (sharing or mounting of a [host] directory or file into a container, appearing like a local path to the container)
 
 [[Resources]]
 - An introduction to immutable infrastructure
