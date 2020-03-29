@@ -21,7 +21,58 @@ https://docs.docker.com/storage/
 
 
 # 47. Persistent Data: Data Volumes
+- use a MySQL image on Docker Hub to learn defaults and best practices: https://github.com/docker-library/mysql/blob/d284e15821ac64b6eda1b146775bf4b6f4844077/8.0/Dockerfile
+- note the [VOLUME] stanza showing the default location of the MySQL database: [VOLUME /var/lib/mysql]
+- do a [docker volume prune] to clear out existing noise of volumes
+- then do [docker pull mysql]
+- then [docker image inspect mysql]
+- now run a container [docker container run --detach --name my-mysql -e MYSQL_ALLOW_EMPTY_PASSWORD=True mysql]
+- use [docker container inspect my-mysql] to see "Mounts" section where the container has a unique [Source] location on the host to store the container's [Destination] data:
+[            "Source": "/var/lib/docker/volumes/f2cff4b93cc08940c67548b8c7368059b8331f3d7f9dcdd9fc3af7e217913384/_data",
+                "Destination": "/var/lib/mysql",]
+- use [docker volume ls] to also view that Source value:
+[docker volume ls
+DRIVER              VOLUME NAME
+local               f2cff4b93cc08940c67548b8c7368059b8331f3d7f9dcdd9fc3af7e21791338]
+- then use [docker volume inspect f2cff4b93cc08940c67548b8c7368059b8331f3d7f9dcdd9fc3af7e217913384] for more info on it
+- on LINUX, you CAN navigate to that "Mountpoint": "/var/lib/docker/volumes/f2cff4b93cc08940c67548b8c7368059b8331f3d7f9dcdd9fc3af7e217913384/_data" location to see the databases; on MAC and WINDOWS, you'd have to navigate into the Linux VM to see that path
+- you CAN from the container what volume(s) it is using, but you CANNOT from the volume see what container it is connected to
+- if you RM or STOP the containers, the associated volumes REMAIN
+
+[Named Volumes] allow you specify things in [docker container run]
+- use the [-v] switch to create a named volume: [docker container run --detach --name my-mysql-named-vol -e MYSQL_ALLOW_EMPTY_PASSWORD=True -v my-mysql-db:/var/lib/mysql mysql]
+- then [docker volume ls] to see it with a friendly name you can associate with your container
+- then [docker volume inspect my-mysql-db] to see the cleaner Mountpoint path: ["Mountpoint": "/var/lib/docker/volumes/my-mysql-db/_data",]
+- then delete the container: [docker container rm -f my-mysql-named-vol]
+- then create a new container name: docker container run --detach --name my-mysql-named-vol2 -e MYSQL_ALLOW_EMPTY_PASSWORD=True -v my-mysql-db:/var/lib/mysql mysql
+- it is still using the same volume: [docker volume ls]
+- [docker container inspect my-mysql-named-vol] shows friendly Source location: ["Source": "/var/lib/docker/volumes/my-mysql-db/_data",]
+
+[WHY USE -v] - to allow use of the same database over and over again regardless of state of attached container
+
+[WHY USE docker volume create]
+- to specify a different driver, options to use on that driver, and/or put labels on it
+- otherwise, for locatl development purposes, just specifying it in a Dockerfile or at the run command is fine
+
+
 # 48. Shell Differences for Path Expansion
+"In the next lecture, you'll learn how to share files and directories between a host and a Docker container. One of the parts of the command line you'll need to type is the host file path you want to share.
+
+With Docker CLI, you can always use a full file path on any OS, but often you'll see me and others use a "parameter expansion" like $(pwd) which means "print working directory".
+
+Here's the important part. Each shell may do this differently, so here's a cheat sheet for which OS and Shell your using. I'll be using $(pwd) on a Mac, but yours may be different!
+
+This isn't a Docker thing, it's a Shell thing.
+
+For PowerShell use: ${pwd} 
+
+For cmd.exe "Command Prompt use: %cd%
+
+Linux/macOS bash, sh, zsh, and Windows Docker Toolbox Quickstart Terminal use: $(pwd) 
+
+Note, if you have spaces in your path, you'll usually need to quote the whole path in the docker command."
+
+
 # 49. Persistent Data: Bind Mounting
 # Quiz 5: Quiz on Persistent Data
 # 50. Assignment: Database Upgrades with Named Volumes
