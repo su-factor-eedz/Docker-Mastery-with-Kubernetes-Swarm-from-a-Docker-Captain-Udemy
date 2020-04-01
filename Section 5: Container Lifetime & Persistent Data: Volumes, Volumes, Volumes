@@ -74,6 +74,21 @@ Note, if you have spaces in your path, you'll usually need to quote the whole pa
 
 
 # 49. Persistent Data: Bind Mounting
+- [Bind Mounting] mapping of host file/directory to container file/directory
+- skips UFS like other volumes, so persists even after deleting container
+- CAN'T specify them in the [Dockerfile], HAVE to use them at runtime when you use the [docker container run] command
+[docker container run -v /Users/bret/stuff:/path/container] (mac/linux)
+[docker container run -v //c/Users/bret/stuff:/path/container] (windows)
+- difference between the above syntax and Named Volumes is the leading forward slash
+- "the host always wins"
+- can make it read-only
+- useful when containers are accessing files you're using or changing on your host:
+[docker container run --detach --name my-nginx --publish 80:80 -v $(pwd):/usr/share/nginx/html nginx]
+-- then open http://localhost
+-- then change any word in index.html (referenced in the Dockerfile)
+-- then see the change in real-time by visiting the index.html file again
+-- since the entire directory is mapped, all file changes are reflected automatically in the running container
+
 # Quiz 5: Quiz on Persistent Data
 # 50. Assignment: Database Upgrades with Named Volumes
 # 51. Assignment Answers: Database Upgrades with Named Volumes
