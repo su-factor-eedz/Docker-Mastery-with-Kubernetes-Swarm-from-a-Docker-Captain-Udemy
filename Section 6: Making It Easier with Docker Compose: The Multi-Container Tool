@@ -1,4 +1,21 @@
 # 55. Docker Compose and The docker-compose.yml File
+## Docker Compose
+- configure relationships between containers
+- save docker container run settings in easy-to-read file
+- spin them up and tear down with one command
+
+### Two Parts of Docker Compose
+1. YAML File - describes solution options for containers, networks, volumes, environment variables, images, ...
+2. [docker-compose] CLI Tool - used for local dev/test automation with those YAML files
+
+- Docker Compose used to be called "fig" -- version 1, though it didn't have a version line
+- Compose YAML Format has its own versions, which are now specified as the first line in the file
+- as of [version 1.13+], can be used beyond local dev/test in production with [Swarm] using [docker] command lin
+- [docker-compose --help]
+- [docker-compose.yml] default filename
+- [docker-compose.yml -f] can be used to specify different file name
+- 
+
 [[Resources]]
 
 # 56. Trying Out Basic Compose Commands
