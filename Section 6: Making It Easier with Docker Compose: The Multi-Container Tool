@@ -14,11 +14,31 @@
 - [docker-compose --help]
 - [docker-compose.yml] default filename
 - [docker-compose.yml -f] can be used to specify different file name
-- 
+- [spaces] in hierarchy have a YAML-specific convention
+- At minimum, have [version] start with at least v 2 outherwise lose features and [services] correspond to the containers; [volumes] are like volume create and [networks] like network create are [optional]
+- see /Proj/study/udemy/udemy-docker-mastery/compose-sample-1 [template.yml], [docker-compose.yml] where [ports] is for [--publish], [compose-2.yml] where [environment] list doesn't use dashes, and [compose-3.yml] where [environment] does use dashes and [depends_on] in [mysql-secondary] service is used to show relationship to [mysql-primary] service.
 
 [[Resources]]
+YAML GET STARTED
+https://yaml.org/start.html
+
+%YAML 1.1   # Reference card
+https://yaml.org/refcard.html
+
+Compose file versions and upgrading
+https://docs.docker.com/compose/compose-file/compose-versioning/
+
+Docker Compose Release Downloads
+https://github.com/docker/compose/releases
+
+SO6-Compose-Slides.pdf
+DM-S06-Commands.txt
+SO6-Compose-Slides.pdf
+
 
 # 56. Trying Out Basic Compose Commands
+## Docker Compose CLI Tool
+
 [[Resources]]
 
 # 57. Assignment: Build a Compose File For a Multi-Container Service
