@@ -38,6 +38,16 @@ SO6-Compose-Slides.pdf
 
 # 56. Trying Out Basic Compose Commands
 ## Docker Compose CLI Tool
+- comes with Docker for Windows/Mac, but needs download for Linux
+- not for production, meant for local development/testing
+- [docker-compose up] for doing everying in the compose file
+- [docker-compose down] for removing everything like container, volumes, networks
+- SCENARIO: if all projects had a [Dockerfile] and [docker-compose.yml], someone can be onboarded with:
+[git clone github.com/some/software]
+[docker-compose up]
+### open: /Proj/study/udemy/udemy-docker-mastery/compose-sample-2
+
+[#Stopped at 5:00#]
 
 [[Resources]]
 
