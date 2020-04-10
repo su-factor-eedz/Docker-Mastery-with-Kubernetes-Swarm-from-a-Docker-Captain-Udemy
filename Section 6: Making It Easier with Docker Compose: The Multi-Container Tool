@@ -46,10 +46,31 @@ SO6-Compose-Slides.pdf
 [git clone github.com/some/software]
 [docker-compose up]
 ### open: /Proj/study/udemy/udemy-docker-mastery/compose-sample-2
+[docker-compose up]
+vs
+[docker-compose -d]
+- The "It works!" message comes from the Apache server through the Nginx server
+-[
+web_1    | 172.18.0.3 - - [10/Apr/2020:05:11:49 +0000] "GET /favicon.ico HTTP/1.0" 404 196
+proxy_1  | 172.18.0.1 - - [10/Apr/2020:05:11:49 +0000] "GET /favicon.ico HTTP/1.1" 404 196 "http://localhost/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36" "-"
+]-
 
-[#Stopped at 5:00#]
+[Ctrl-C]
+
+[docker-compose up --detach]
+[docker-compose logs]
+[docker-compose ps]
+[docker-compose top]
+[docker-compose down]
 
 [[Resources]]
+docker-compose download
+https://github.com/docker/compose/releases
+
+Only one host for production environment. What to use: docker-compose or single node swarm? #8
+https://github.com/BretFisher/ama/issues/8
+
+
 
 # 57. Assignment: Build a Compose File For a Multi-Container Service
 [[Resources]]
