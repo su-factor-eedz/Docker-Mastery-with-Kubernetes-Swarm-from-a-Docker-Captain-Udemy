@@ -71,8 +71,15 @@ Only one host for production environment. What to use: docker-compose or single 
 https://github.com/BretFisher/ama/issues/8
 
 
-
 # 57. Assignment: Build a Compose File For a Multi-Container Service
+- create a compose file from scratch for Drupal content management system website
+- needs database, so use [drupal] image and [postgres] image
+- export port 8080 for drupal
+- version 2
+- set [POSTGRES_PASSWORD] environment variable for postgres
+- Drupal assumes DB is "localhost" with web server and database in SAME container
+- 
+
 [[Resources]]
 
 # 58. Assignment Answers: Build a Compose File For a Multi-Container Service
