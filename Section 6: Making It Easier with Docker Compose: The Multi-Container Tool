@@ -154,7 +154,46 @@ volumes:
 
 
 # 59. Adding Image Building to Compose Files
+- adding image building to compose files
+- ensures image is ready to go when using compose commands
+- looks in cache for image, building with [docker-compose up] only if image is not found
+- use [docker-compose build] to rebuild if you make changes or [docker-compose up --build]
+- good when using compose locally and complex with custom environment variables or build arguments (environment variables only available during builds)
+
+QUESTION: why does lesson have [image: nginx-custom] in the "proxy" service but not in the file from Git?
+
+[docker-compose up -d]
+[docker-compose down --rmi local] deletes images as well that DON'T have a custom tag
+[docker-compose down --rmi all] removes ALL images created by project
+
 [[Resources]]
+
+https://docs.docker.com/compose/compose-file/#build
+build🔗
+Configuration options that are applied at build time.
+
+build can be specified either as a string containing a path to the build context:
+
+version: "3.7"
+services:
+  webapp:
+    build: ./dir
+Or, as an object with the path specified under context and optionally Dockerfile and args:
+
+version: "3.7"
+services:
+  webapp:
+    build:
+      context: ./dir
+      dockerfile: Dockerfile-alternate
+      args:
+        buildno: 1
+If you specify image as well as build, then Compose names the built image with the webapp and optional tag specified in image:
+
+build: ./dir
+image: webapp:tag
+This results in an image named webapp and tagged tag, built from ./dir.
+
 
 # 60. Assignment: Compose For Run-Time Image Building and Multi-Container Development
 
