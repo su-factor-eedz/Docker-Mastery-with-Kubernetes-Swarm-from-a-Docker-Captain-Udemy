@@ -82,6 +82,7 @@ https://github.com/BretFisher/ama/issues/8
 [[Resources]]
 
 # 58. Assignment Answers: Build a Compose File For a Multi-Container Service
+
 ##MY ANSWERS (WRONG - NOT WORKING - )##
 ###ERROR: The Compose file './docker-compose.yml' is invalid because:
 services.myPostgres.volumes contains an invalid type, it should be an array
@@ -119,6 +120,37 @@ networks:
 volumes: 
   myDrup: {}
   myPost: {}
+
+###ASSIGNMENT CORRECTED###
+version: '2'
+
+services:
+  myDrupal:
+    image: drupal
+    volumes:
+      - myDrup-volumes:/var/www/html/volumes
+      - myDrup-profiles:/var/www/html/profiles
+      - myDrup-sites:/var/www/html/themes
+      - myDrup-modules:/var/www/html/modules
+    ports:
+      - '8080:80' #had to use drupal documentation and FROM apache image to see it listens on port 80
+    depends_on: 
+      - myPostgres
+
+  myPostgres:
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=postGress
+
+volumes: 
+  myDrup-volumes:
+  myDrup-profiles:
+  myDrup-sites:
+  myDrup-modules:
+
+# database default name is postgres not POSTGRES_USER
+
+[docker-compose down -v] to also remove volumes
 
 
 # 59. Adding Image Building to Compose Files
