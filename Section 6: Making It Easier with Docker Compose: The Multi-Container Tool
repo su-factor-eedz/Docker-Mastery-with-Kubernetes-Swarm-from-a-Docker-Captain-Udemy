@@ -258,3 +258,4 @@ WORKDIR /var/www/html
 
 
 # Quiz 6: Quiz on Docker Compose
+Hard Quiz!
