@@ -13,7 +13,7 @@
 - as of [version 1.13+], can be used beyond local dev/test in production with [Swarm] using [docker] command lin
 - [docker-compose --help]
 - [docker-compose.yml] default filename
-- [docker-compose.yml -f] can be used to specify different file name
+- [docker-compose -f] can be used to specify different file name
 - [spaces] in hierarchy have a YAML-specific convention
 - At minimum, have [version] start with at least v 2 outherwise lose features and [services] correspond to the containers; [volumes] are like volume create and [networks] like network create are [optional]
 - see /Proj/study/udemy/udemy-docker-mastery/compose-sample-1 [template.yml], [docker-compose.yml] where [ports] is for [--publish], [compose-2.yml] where [environment] list doesn't use dashes, and [compose-3.yml] where [environment] does use dashes and [depends_on] in [mysql-secondary] service is used to show relationship to [mysql-primary] service.
@@ -78,11 +78,48 @@ https://github.com/BretFisher/ama/issues/8
 - version 2
 - set [POSTGRES_PASSWORD] environment variable for postgres
 - Drupal assumes DB is "localhost" with web server and database in SAME container
-- 
 
 [[Resources]]
 
 # 58. Assignment Answers: Build a Compose File For a Multi-Container Service
+##MY ANSWERS (WRONG - NOT WORKING - )##
+###ERROR: The Compose file './docker-compose.yml' is invalid because:
+services.myPostgres.volumes contains an invalid type, it should be an array
+Unsupported config option for services.myPostgres: 'network'###
+
+version: '2'
+
+# same as 
+# docker run -p 80:4000 -v $(pwd):/site bretfisher/jekyll-serve
+
+services:
+  myDrupal:
+    image: drupal
+    volumes:
+      - ./myDrup:/var/www/html
+    ports:
+      - '8080:8080'
+    networks:
+      - linkThem
+    depends_on: 
+      - myPostgres
+
+  myPostgres:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: post-gress
+    volumes:
+      -./myPost:/var/lib/postgresql/data
+    network:
+      - linkThem
+
+networks:
+  linkThem: {}
+
+volumes: 
+  myDrup: {}
+  myPost: {}
+
 
 # 59. Adding Image Building to Compose Files
 [[Resources]]
