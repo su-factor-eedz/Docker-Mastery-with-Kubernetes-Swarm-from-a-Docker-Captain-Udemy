@@ -1,4 +1,41 @@
 # 62. Swarm Mode: Built-In Orchestration
+- maintain container life cycles
+- scale up, down, in, out
+- ensure containers re-create if they fail
+- replace containers without downtime (blue/green deploy)
+- track which node a container was started on
+- create cross-node virtual networks
+- ensure only trusted servers run our containers
+- store secrets, keys, passwords, and allocate them to the right container
+
+## Swarm Mode
+- 2016 - Docker no longer just a container runtime, introducing features to bring it into production
+- server clustering solution bringing together different OS hosts or nodes into a single manageable unit with a lifecycle you can manage
+- [Swarm Classic] was an add-on component to Docker before 1.12; a container that ran inside Docker, accepting Docker commands then repeating them out to multiple servers, but not solving most of the problems of running containers
+- Dockercon 2016 - Docker announced [Swarm Kit] a set of libraries of a toolkit of Swarm features in a Docker server 1.12
+- January 2017 - 1.13 enhancements of [Stacks] and [Secrets]
+- Swarm is NOT enabled out of the box [QUESTION if the commands are responding with usage documentation, does that mean it actually IS enabled? swarm, node, service, stack, and secret]
+
+### Manager Nodes
+- have [Raft Consensus Database] on them - stores configuration to be authority in a swarm, all keeping a copy of the database, encrypting traffic to ensure integrity, and guarantee the trust that they're able to manage the swarm securely
+- virtual machines or physical hosts running Linux distribution or Windows Server
+- Manager Nodes can ALSO be workers by [demotion]
+- can be considered a worker with permissions to control the swarm
+- only requirement is they are all using the same version of Docker
+
+### Worker Nodes
+- also virtual machines or physical hosts
+- can be [promoted] to Manager Node
+
+### Control Plane
+- what the nodes communicate over
+- how orders are sent around the swarm
+
+### [docker service]
+- replaces [docker container run] command in context of a Swarm
+- [tasks] service can have one or more tasks that each run a container/replica 
+- [docker service create] spin up an image of as many replicas as asked for, using manager nodes to decide where in the swarm to place those containers, spreading them out by default
+
 
 [[RESOURCES]]
 Docker 1.12 Swarm Mode Deep Dive Part 1: Topology
