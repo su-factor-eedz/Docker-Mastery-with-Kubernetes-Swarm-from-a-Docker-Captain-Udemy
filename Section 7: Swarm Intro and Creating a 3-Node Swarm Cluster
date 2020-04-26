@@ -57,6 +57,31 @@ http://thesecretlivesofdata.com/raft/
 
 
 # 63. Create Your First Service and Scale It Locally
+- single-node swarm
+
+[docker info]
+- by default, Docker does not enable any of the Swarm features
+ Plugins:
+  Volume: local
+  Network: bridge host ipvlan macvlan null overlay
+  Log: awslogs fluentd gcplogs gelf journald json-file local logentries splunk syslog
+ Swarm: inactive <-------
+ Runtimes: runc
+
+[docker swarm init]
+docker swarm init
+Swarm initialized: current node (6p6iq8lgech2nsa9go88w44ps) is now a manager.
+
+To add a worker to this swarm, run the following command:
+
+    docker swarm join --token SWMTKN-1-3fogvfuv1jsu1bnnxwq97z8o8scqqwwo9ur52km6e6bwrsdk49-d1o44m3ork20rc5oskl2cguyh 192.168.65.3:2377
+
+To add a manager to this swarm, run 'docker swarm join-token manager' and follow the instructions.
+## "What Just Happened?"
+### PKI and Security Automation
+- Root Signing Certificate created for our Swarm -- to establish trust and sign certificates for all nodes and all managers
+- Certified is issued for first Manager node
+- Join tokens are created -- to be used on other nodes to join this swarm
 
 [[Resources]]
 Deploy services to a swarm
