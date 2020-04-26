@@ -82,6 +82,192 @@ To add a manager to this swarm, run 'docker swarm join-token manager' and follow
 - Root Signing Certificate created for our Swarm -- to establish trust and sign certificates for all nodes and all managers
 - Certified is issued for first Manager node
 - Join tokens are created -- to be used on other nodes to join this swarm
+### Raft datbase created to store root CA, configs and secrets
+- Aside from enabling the [Swarm API], it creates the [Raft Consensus Database]
+- [Raft] is a protocol that ensures consistency across multiple nodes; ideal for cloud computing where there is no guarantee that any one resource will be available at any moment
+- Raft creates [database] on disk, stores configuration of the swarm, "that first manager," and encrypts it for 1.13+
+- waits for other nodes before [replicating] the database to them
+- all traffic between nodes/Managers encrypted via mutual TLS in ["control plane"]
+- no need for a separate key/value system to store orchestration/secrets as a "config db" since Docker builds that into the daemon and handles it for us
+
+## practice one node swarm
+[docker node ls]
+- shows the one [Leader] allowed at a time among Managers
+[docker node ls]
+ID                            HOSTNAME            STATUS              AVAILABILITY        MANAGER STATUS      ENGINE VERSION
+6p6iq8lgech2nsa9go88w44ps *   docker-desktop      Ready               Active              Leader              19.03.8
+
+[docker node --help]
+docker node --help
+
+Usage:	docker node COMMAND
+
+Manage Swarm nodes
+
+Commands:
+  demote      Demote one or more nodes from manager in the swarm
+  inspect     Display detailed information on one or more nodes
+  ls          List nodes in the swarm
+  promote     Promote one or more nodes to manager in the swarm
+  ps          List tasks running on one or more nodes, defaults to current node
+  rm          Remove one or more nodes from the swarm
+  update      Update a node
+
+Run 'docker node COMMAND --help' for more information on a command.
+
+[docker swarm --help]
+docker swarm --help
+
+Usage:	docker swarm COMMAND
+
+Manage Swarm
+
+Commands:
+  ca          Display and rotate the root CA
+  init        Initialize a swarm
+  join        Join a swarm as a node and/or manager
+  join-token  Manage join tokens
+  leave       Leave the swarm
+  unlock      Unlock swarm
+  unlock-key  Manage the unlock key
+  update      Update the swarm
+
+Run 'docker swarm COMMAND --help' for more information on a command.
+
+- "narrow-scoped command" to init, join/leave, unlock (later discussion)
+
+[docker service --help]
+docker service --help
+
+Usage:	docker service COMMAND
+
+Manage services
+
+Commands:
+  create      Create a new service
+  inspect     Display detailed information on one or more services
+  logs        Fetch the logs of a service or task
+  ls          List services
+  ps          List the tasks of one or more services
+  rm          Remove one or more services
+  rollback    Revert changes to a service's configuration
+  scale       Scale one or multiple replicated services
+  update      Update a service
+
+Run 'docker service COMMAND --help' for more information on a command.
+
+- [service] in a swarm replaces [docker run]
+- in a swarm/cluster, we don't care about individual nodes, and instead treat them like cattle
+
+[docker service create alpine ping 8.8.8.8]
+- like [docker run], returns an ID, but this time it's the SERVICE ID, not container ID
+
+docker service create alpine ping 8.8.8.8
+tnk63f19w38z0yqgz6o2k0jpf
+overall progress: 1 out of 1 tasks
+1/1: running
+verify: Service converged
+
+[docker service ls]
+ID                  NAME                MODE                REPLICAS            IMAGE               PORTS
+tnk63f19w38z        jolly_curran        replicated          1/1                 alpine:latest
+
+- REPLICAS shows how many running vs how many specified to run; goal of [Orchestrator] is to make the numbers match
+
+[docker service ps [name]]
+docker service ps jolly_curran
+- shows [tasks] or [containers] for this service
+
+docker service ps jolly_curran
+ID                  NAME                IMAGE               NODE                DESIRED STATE       CURRENT STATE           ERROR               PORTS
+oqtn5qtmfsj9        jolly_curran.1      alpine:latest       docker-desktop      Running             Running 3 minutes ago
+
+- unlike [docker service ls], has NODE property to show which service the service is running on
+- and has NAME value that is an increment of the service's name
+
+[docker container ls] shows Docker Swarm adding information to the names
+docker container ls
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+3f96eff14f1c        alpine:latest       "ping 8.8.8.8"      6 minutes ago       Up 6 minutes                            jolly_curran.1.oqtn5qtmfsj96pji2ixk1da6h
+
+### scaling up the service
+[docker service update [ID] --replicas 3]
+[docker service update tnk63f19w38z --replicas 3]
+tnk63f19w38z
+overall progress: 3 out of 3 tasks
+1/3: running   [==================================================>]
+2/3: running   [==================================================>]
+3/3: running   [==================================================>]
+verify: Service converged
+
+[docker service ls]
+ID                  NAME                MODE                REPLICAS            IMAGE               PORTS
+tnk63f19w38z        jolly_curran        replicated          3/3                 alpine:latest
+
+[docker container ls]
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+403dd468e16a        alpine:latest       "ping 8.8.8.8"      35 seconds ago      Up 33 seconds                           jolly_curran.2.24icqw4etd7a4hbhj4oltfs6m
+f99b57fc95d7        alpine:latest       "ping 8.8.8.8"      35 seconds ago      Up 33 seconds                           jolly_curran.3.qu5gmy1mfkohpk3fx6xe3dx7y
+3f96eff14f1c        alpine:latest       "ping 8.8.8.8"      9 minutes ago       Up 9 minutes                            jolly_curran.1.oqtn5qtmfsj96pji2ixk1da6h
+
+[docker service ps jolly_curran]
+ID                  NAME                IMAGE               NODE                DESIRED STATE       CURRENT STATE            ERROR               PORTS
+oqtn5qtmfsj9        jolly_curran.1      alpine:latest       docker-desktop      Running             Running 12 minutes ago
+24icqw4etd7a        jolly_curran.2      alpine:latest       docker-desktop      Running             Running 3 minutes ago
+qu5gmy1mfkoh        jolly_curran.3      alpine:latest       docker-desktop      Running             Running 3 minutes ago
+
+[docker update --help]
+- docker run containers command that allowed us to update certain variables on running container without killing or restarting it
+- almost all options are related to limiting and controlling resource usage for that container
+
+docker update --help
+
+Usage:	docker update [OPTIONS] CONTAINER [CONTAINER...]
+
+Update configuration of one or more containers
+
+Options:
+      --blkio-weight uint16        Block IO (relative weight), between 10 and 1000, or 0 to disable (default 0)
+      --cpu-period int             Limit CPU CFS (Completely Fair Scheduler) period
+      --cpu-quota int              Limit CPU CFS (Completely Fair Scheduler) quota
+      --cpu-rt-period int          Limit the CPU real-time period in microseconds
+      --cpu-rt-runtime int         Limit the CPU real-time runtime in microseconds
+  -c, --cpu-shares int             CPU shares (relative weight)
+      --cpus decimal               Number of CPUs
+      --cpuset-cpus string         CPUs in which to allow execution (0-3, 0,1)
+      --cpuset-mems string         MEMs in which to allow execution (0-3, 0,1)
+      --kernel-memory bytes        Kernel memory limit
+  -m, --memory bytes               Memory limit
+      --memory-reservation bytes   Memory soft limit
+      --memory-swap bytes          Swap limit equal to memory plus swap: '-1' to enable unlimited swap
+      --pids-limit int             Tune container pids limit (set -1 for unlimited)
+      --restart string             Restart policy to apply when a container exits
+[USE CASES] database gets bigger and need more RAM, out of control process using too much CPU and you need to limit it,...
+
+[docker service update --help]
+- A LOT MORE options
+- goal of a Swarm service is to be able to replace containers and update changes in the service without taking the entire service down
+- [rolling update] allows service to remain available as containers are taken down and restarted one at a time in a "pattern of consistent availability"
+
+[docker container ls] then [docker container rm -f [name].1.[ID]]
+[docker service ps [name]] will show history of history of the first task that was removed then created automatically
+[docker container rm -f jolly_curran.1.oqtn5qtmfsj96pji2ixk1da6h]
+[docker service ps jolly_curran]
+ID                  NAME                 IMAGE               NODE                DESIRED STATE       CURRENT STATE            ERROR                         PORTS
+lkv3rn37b0g6        jolly_curran.1       alpine:latest       docker-desktop      Running             Running 37 seconds ago
+oqtn5qtmfsj9         \_ jolly_curran.1   alpine:latest       docker-desktop      Shutdown            Failed 42 seconds ago    "task: non-zero exit (137)"
+24icqw4etd7a        jolly_curran.2       alpine:latest       docker-desktop      Running             Running 21 minutes ago
+qu5gmy1mfkoh        jolly_curran.3       alpine:latest       docker-desktop      Running             Running 21 minutes ago
+- UNLIKE [docker container run] which would never recreate a container on its own
+- DEMO of how [docker service] is never an action directly against a [container]; instead, it's a requesto to the [orchestration system] to put a job into its queue to perform actions against the swarm
+- provides rollback possibilities, failure mitigation, and intelligence built-in
+
+### to remove the containers, remove the service
+[docker service rm jolly_curran]
+[docker service ls]
+[docker container ls]
+- both empty, though containers may take some time to shut down and delete
+
 
 [[Resources]]
 Deploy services to a swarm
@@ -89,9 +275,46 @@ https://docs.docker.com/engine/swarm/services/
 
 
 # 64. UI Change For Service Create/Update
+UI Change For Service Create/Update
+You may notice that when using docker service create  and update , that the CLI acts differently for some Lectures then your own Docker. This is due to a change in the way Docker CLI shows the service commands in 2017.
+
+--detach is a new option that changes the CLI response after you run a command.
+This is a good thing, and doesn't affect the functionality of Swarm. It's just a UI difference. I use various 2017 versions of Docker in this course, so you may see different output for your own service create/update commands vs. mine, which is fine.
+
+History of changes to CLI output for service create/update:
+
+Before 17.05, the service commands would immediately return to your shell prompt and the containers would be scheduled in the background (asynchronously). To check if they deployed properly you would need to use docker service ls and docker service ps.
+Starting in 17.05 the service commands were given a --detach  option, which defaulted to true , but warned you each time about a future change to false . The create/update commands were still asynchronous.
+Starting in 17.10 the --detach  default changes to false , so you'll always see the UI wait synchronously while service tasks are deployed/updated, unless you set --detach true  in each command.
+For all stable versions after 17.12, just remember:
+
+Use the defaults if you're interactive at the CLI, typing commands yourself.
+Use --detach true  if you're using automation or shell scripts to get things done.
+
 
 # 65. Docker Machine Bug With Swarm
+Docker Machine Bug With Swarm
+If you're planning to use docker-machine to create local VM's for Swarm, note there is a bug in 18.09.0 that prevents Swarm network ports from listening. This is fixed in 18.09.1 so make sure you have the latest Docker Desktop or Docker Toolbox and your VM's are up to date.
+
+Current versions (October 2019) include:
+
+docker version 19.03.2
+
+docker-machine version 0.16.2
+
+To ensure you have the latest Docker Toolbox, download it from the GitHub release page.
+
+You'll know you're up to date when you do a docker-machine ls and the VM's have 18.09.1 or later.
+
+To update existing docker-machine VM's, you can use docker-machine upgrade <name of vm>.
+
 
 # 66. Create a 3-Node Swarm Cluster
+- CANNOT use Docker on our own machines, because we need three
+- Options:
+-- play-with-docker.com (resets after 4 hours)
+-- docker-machine (automation for provisioning local machines locally and on Internet and automatically setting up Docker for you) + VirtualBox + enough RAM
+-- Digital Ocean (fast SSD performance, VMs in the cloud, get first $10 free with course code) + Docker install
+-- turn up three machines with Docker installed
 
 # Quiz 7: Quiz on Swarm Mode Basics
