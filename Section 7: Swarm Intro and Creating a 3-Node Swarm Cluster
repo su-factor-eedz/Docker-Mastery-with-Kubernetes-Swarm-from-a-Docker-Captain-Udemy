@@ -310,11 +310,29 @@ To update existing docker-machine VM's, you can use docker-machine upgrade <name
 
 
 # 66. Create a 3-Node Swarm Cluster
-- CANNOT use Docker on our own machines, because we need three
+- CANNOT use Docker on our own machines, because we need three Linux OSs
 - Options:
 -- play-with-docker.com (resets after 4 hours)
 -- docker-machine (automation for provisioning local machines locally and on Internet and automatically setting up Docker for you) + VirtualBox + enough RAM
 -- Digital Ocean (fast SSD performance, VMs in the cloud, get first $10 free with course code) + Docker install
 -- turn up three machines with Docker installed
+
+[[Resources]]
+Create and upload a SSH key to DigitalOcean Droplets
+How-to Add SSH Keys to New or Existing Droplets
+https://www.digitalocean.com/docs/droplets/how-to/add-ssh-keys/
+
+Docker Swarm Firewall Ports
+https://www.bretfisher.com/docker-swarm-firewall-ports/
+
+Configure SSH for Saving Options
+https://www.digitalocean.com/community/tutorials/how-to-configure-custom-connection-options-for-your-ssh-client
+
+Windows Hyper-V driver for docker
+https://docs.docker.com/machine/drivers/hyper-v/
+
+DigitalOcean $100 credit on new
+https://www.digitalocean.com/?refcode=ee97875d52fa&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=CopyPaste
+
 
 # Quiz 7: Quiz on Swarm Mode Basics
