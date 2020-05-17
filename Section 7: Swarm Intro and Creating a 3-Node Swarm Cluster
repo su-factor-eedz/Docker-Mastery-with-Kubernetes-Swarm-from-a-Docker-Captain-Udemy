@@ -312,10 +312,19 @@ To update existing docker-machine VM's, you can use docker-machine upgrade <name
 # 66. Create a 3-Node Swarm Cluster
 - CANNOT use Docker on our own machines, because we need three Linux OSs
 - Options:
--- play-with-docker.com (resets after 4 hours)
--- docker-machine (automation for provisioning local machines locally and on Internet and automatically setting up Docker for you) + VirtualBox + enough RAM
+## play-with-docker.com (resets after 4 hours)
+## docker-machine
+- automation for provisioning local machines locally and on Internet and automatically setting up Docker for you + VirtualBox + enough RAM
+- automates dev and test environments, but not designed to set up the production settings needed in a multi-node swarm.
+[docker-machine create node1]
+[docker-machine ssh node1]
+[docker-machine env node1]
+- environment command gives output you can copy and paste to command line
+- OR copy and paste the bottom line to create the environment variables [eval $(docker-machine env node1]
+[docker info] will now show information for node1
 -- Digital Ocean (fast SSD performance, VMs in the cloud, get first $10 free with course code) + Docker install
 -- turn up three machines with Docker installed
+- get.docker.com works on all major Linux distribution
 
 [[Resources]]
 Create and upload a SSH key to DigitalOcean Droplets
